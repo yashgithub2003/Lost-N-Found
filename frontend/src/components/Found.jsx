@@ -93,7 +93,7 @@ const Found = () => {
     <div className="bg-[#151e32] min-h-screen w-screen text-slate-300 flex items-center justify-center">
       <div className="bg-[#0c101a] w-[35%] rounded-2xl flex flex-col justify-center items-center gap-6 p-6">
         
-        <h1 className="text-3xl font-bold text-slate-500">LOGO</h1>
+        <h1 className="text-3xl font-bold text-slate-500">Found the Item</h1>
 
         <form onSubmit={searchFormHandler} className="w-full flex flex-col gap-4">
 

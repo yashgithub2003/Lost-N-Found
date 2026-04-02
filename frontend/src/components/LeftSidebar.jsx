@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 const LeftSidebar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { user } = useAuth();
   const middleItems = [
     { icon: <Home />, text: "Home" },
     { icon: <Search />, text: "Search" },
@@ -65,7 +65,7 @@ const LeftSidebar = () => {
           </div>
         ))}
       </div>
-
+        <h1>Welcome back,<br/>{user?.email}</h1>
       {/* 🔻 Bottom */}
       <div
         onClick={() => sidebarHandler(bottomItem.text)}

@@ -9,31 +9,56 @@ import History from "./components/History";
 import Search from "./components/Search";
 import Found from "./components/Found";
 import Item from "./components/Item";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoutes>
+        <MainLayout />
+      </ProtectedRoutes>
+    ),
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <ProtectedRoutes>
+            <Home />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/history",
-        element: <History />,
+        element: (
+          <ProtectedRoutes>
+            <History />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/search",
-        element: <Search />,
+        element: (
+          <ProtectedRoutes>
+            <Search />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/found",
-        element: <Found />,
+        element: (
+          <ProtectedRoutes>
+            <Found />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/item/:id",
-        element: <Item />,
+        element: (
+          <ProtectedRoutes>
+            <Item />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },
