@@ -1,4 +1,4 @@
-import  prisma  from "../config/prisma.js";
+import prisma from "../config/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -32,7 +32,7 @@ export const registerUser = async (req, res) => {
     });
     return res.status(201).json({
       message: "Success",
-      status: true,
+      success: true,
     });
   } catch (error) {
     console.log(error);
@@ -42,18 +42,20 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Enter all fields",
         success: false,
       });
     }
+
     const user = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email },
       select: {
         id: true,
         email: true,
-        password : true,
+        password: true,
         name: true,
         posts: {
           select: {
@@ -61,50 +63,94 @@ export const loginUser = async (req, res) => {
             title: true,
             status: true,
             imageUrl: true,
+            content:true,
           },
         },
       },
     });
+
     if (!user) {
       return res.status(401).json({
-        message: "user not exists",
+        message: "User does not exist",
         success: false,
       });
     }
+
     const isPasswordMatch = await bcrypt.compare(password, user.password);
+
     if (!isPasswordMatch) {
       return res.status(401).json({
-        message: "enter correct password",
+        message: "Incorrect password",
         success: false,
       });
     }
-    const token = await jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
+
+    const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
+
     const { password: _, ...safeUser } = user;
+
     return res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "lax",
+        secure: false,
         maxAge: 1 * 24 * 60 * 60 * 1000,
       })
       .json({
         message: `Welcome back ${user.email}`,
         success: true,
-        user:safeUser,
+        user: safeUser,
       });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    return res.cookie("token", "", { maxAge: 0 }).json({
+      message: "Logout Successfully",
+      success: true,
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const logout = async (req,res) =>{
-    try {
-        return res.cookie("token","",{maxAge:0}).json({
-            message : "Logout Successfully",
-            success : true
-        })
-    } catch (error) {
-        console.log(error);
-    }
+export const getUser = async (req,res) => {
+  const token = req.cookies.token
+  if(!token){
+    return res.status(401).json({
+      success:true
+    })
+  }
+  const decode = jwt.verify(token,process.env.SECRET_KEY);
+  const user = await prisma.user.findUnique({
+      where: { id : decode.userId },
+      select: {
+        id: true,
+        email: true,
+        password: false,
+        name: true,
+        posts: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            imageUrl: true,
+            content : true,
+          },
+        },
+      },
+    });
+    return res.json({
+      success:true,
+      user
+    })
 }

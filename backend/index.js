@@ -9,11 +9,14 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
-
 
 app.listen(8000, () => {
   console.log("Server running on port 8000");
