@@ -17,7 +17,7 @@ export const signupUser = (input) => {
 }
 
 export const logout = () => {
-    return API.get('user/logout')
+    return API.get('/user/logout')
 }
 
 export const searchPost = (formData) => {
