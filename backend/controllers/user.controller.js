@@ -123,20 +123,24 @@ export const logout = async (req, res) => {
   }
 };
 
-export const getUser = async (req,res) => {
-  const token = req.cookies.token
-  if(!token){
-    return res.status(401).json({
-      success:true
-    })
-  }
-  const decode = jwt.verify(token,process.env.SECRET_KEY);
-  const user = await prisma.user.findUnique({
-      where: { id : decode.userId },
+export const getUser = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const decode = jwt.verify(token, process.env.SECRET_KEY);
+
+    const user = await prisma.user.findUnique({
+      where: { id: decode.userId },
       select: {
         id: true,
         email: true,
-        password: false,
         name: true,
         posts: {
           select: {
@@ -144,13 +148,23 @@ export const getUser = async (req,res) => {
             title: true,
             status: true,
             imageUrl: true,
-            content : true,
+            content: true,
           },
         },
       },
     });
-    return res.json({
-      success:true,
-      user
-    })
-}
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(401).json({
+      success: false,
+      message: "Invalid token",
+    });
+  }
+};
