@@ -25,6 +25,7 @@ export const searchPost = (formData) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    withCredentials: true,
   });
 };
 
