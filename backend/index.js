@@ -9,11 +9,10 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
-const corsOptions = {
-  origin: "https://lost-n-found-9y4kmht5d-yash-adkes-projects.vercel.app",
+app.use(cors({
+  origin: "https://lost-n-found-lwq0f5z3f-yash-adkes-projects.vercel.app",
   credentials: true,
-};
-app.use(cors(corsOptions));
+}));
 
 app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
