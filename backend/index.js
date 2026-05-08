@@ -10,7 +10,7 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-  origin: "https://lost-n-found-mt9k6njri-yash-adkes-projects.vercel.app",
+  origin: "https://lost-n-found-two-sigma.vercel.app",
   credentials: true,
 }));
 
