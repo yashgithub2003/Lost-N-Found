@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/user/getuser",
+        "https://lost-n-found-govn.onrender.com/api/user/getuser",
         { withCredentials: true }
       );
       setUser(res.data.user);
