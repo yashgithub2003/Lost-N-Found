@@ -10,7 +10,7 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://lost-n-found-99wa09udv-yash-adkes-projects.vercel.app",
   credentials: true,
 };
 app.use(cors(corsOptions));
